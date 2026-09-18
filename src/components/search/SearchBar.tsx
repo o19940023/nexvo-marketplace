@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useMarketplace } from '@/context/MarketplaceContext';
-import { Search, Camera, Mic, X, ArrowRight, TrendingUp, Sparkles, Store, User, ArrowUpRight } from 'lucide-react';
+import { Search, Camera, Mic, X, ArrowRight, TrendingUp, ArrowUpRight } from 'lucide-react';
 import { PRODUCTS, CATEGORIES } from '@/data/mockData';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -15,9 +15,9 @@ interface SearchBarProps {
 }
 
 const POPULAR_SEARCHES = [
-  'iPhone 17',
-  'PlayStation 5 Slim',
+  'iPhone 17 Pro',
   'MacBook Air M4',
+  'PlayStation 5 Slim',
   'Sony WH-1000XM6',
   'Dyson V15',
   'Samsung S26 Ultra',
@@ -75,12 +75,12 @@ export default function SearchBar({ initialQuery = '', isHero = false, onSearchS
     : [];
 
   return (
-    <div ref={containerRef} className={`relative w-full ${isHero ? 'max-w-3xl' : 'max-w-xl'}`}>
+    <div ref={containerRef} className={`relative w-full ${isHero ? 'max-w-2xl' : 'max-w-md'}`}>
       <div
         className={`relative flex items-center w-full transition-all duration-200 ${
           isHero
-            ? 'h-13 md:h-15 rounded-2xl bg-white border border-slate-300 shadow-lg shadow-slate-900/5 focus-within:border-slate-900 focus-within:ring-2 focus-within:ring-slate-900/10'
-            : 'h-10 md:h-11 rounded-xl bg-slate-100 border border-slate-200 focus-within:bg-white focus-within:border-slate-900 focus-within:ring-2 focus-within:ring-slate-900/10'
+            ? 'h-12 md:h-13 rounded-xl bg-white border border-slate-200/90 shadow-sm focus-within:border-slate-900 focus-within:ring-2 focus-within:ring-slate-950/5'
+            : 'h-9 md:h-10 rounded-lg bg-slate-100/90 border border-slate-200/70 focus-within:bg-white focus-within:border-slate-900 focus-within:ring-2 focus-within:ring-slate-950/5'
         }`}
       >
         <div className="pl-3.5 pr-2 text-slate-400">
@@ -99,10 +99,10 @@ export default function SearchBar({ initialQuery = '', isHero = false, onSearchS
           onKeyDown={handleKeyDown}
           placeholder={
             marketMode === 'store'
-              ? 'Rəsmi mağazalardan axtar (məs: iPhone 17, PS5, Dyson)...'
-              : 'İkinci əl elanlar içindən axtar (məs: iPhone 17, velosiped)...'
+              ? 'Rəsmi mağaza məhsulu axtarın (iPhone, MacBook, Dyson)...'
+              : 'İkinci əl elan axtarın (təmiz, qutulu, sərfəli)...'
           }
-          className="w-full h-full bg-transparent text-slate-900 text-xs md:text-sm outline-none placeholder:text-slate-400 font-medium"
+          className="w-full h-full bg-transparent text-slate-950 text-xs md:text-sm outline-none placeholder:text-slate-400 font-medium"
         />
 
         {query && (
@@ -117,22 +117,21 @@ export default function SearchBar({ initialQuery = '', isHero = false, onSearchS
           </button>
         )}
 
-        <div className="flex items-center gap-1 pr-2">
+        <div className="flex items-center gap-1 pr-1.5">
           <button
             type="button"
             onClick={openVisualSearch}
-            title="Şəkillə Axtar (Kamera və ya Foto Yüklə)"
-            className="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-all flex items-center gap-1 cursor-pointer"
+            title="Şəkillə Axtarış"
+            className="p-1.5 text-slate-500 hover:text-slate-950 hover:bg-slate-100 rounded-md transition-all flex items-center gap-1 cursor-pointer"
           >
             <Camera className="w-4 h-4" />
-            {isHero && <span className="hidden sm:inline text-xs font-semibold text-slate-700">Foto</span>}
           </button>
 
           <button
             type="button"
             onClick={openVoiceSearch}
-            title="Səslə Axtar"
-            className="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-all cursor-pointer"
+            title="Səslə Axtarış"
+            className="p-1.5 text-slate-500 hover:text-slate-950 hover:bg-slate-100 rounded-md transition-all cursor-pointer"
           >
             <Mic className="w-4 h-4" />
           </button>
@@ -140,10 +139,10 @@ export default function SearchBar({ initialQuery = '', isHero = false, onSearchS
           {isHero && (
             <button
               onClick={() => handleSearch(query || 'iPhone 17')}
-              className="ml-1 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition-all hidden sm:flex items-center gap-1.5 cursor-pointer shadow-xs"
+              className="ml-1 px-3.5 py-1.5 btn-primary text-xs font-semibold rounded-lg hidden sm:flex items-center gap-1 cursor-pointer"
             >
               <span>Axtar</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <ArrowRight className="w-3 h-3" />
             </button>
           )}
         </div>
@@ -151,12 +150,12 @@ export default function SearchBar({ initialQuery = '', isHero = false, onSearchS
 
       {/* Autocomplete Dropdown */}
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden z-50 animate-in fade-in duration-150">
+        <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-slate-200/80 overflow-hidden z-50 animate-fade-up">
           {query.trim().length > 0 ? (
-            <div className="p-3 space-y-3 max-h-[70vh] overflow-y-auto">
+            <div className="p-2.5 space-y-3 max-h-[70vh] overflow-y-auto">
               {matchedProducts.length > 0 && (
                 <div>
-                  <div className="px-3 py-1 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                  <div className="px-2.5 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                     Uyğun Məhsullar
                   </div>
                   <div className="mt-1 space-y-1">
@@ -165,24 +164,24 @@ export default function SearchBar({ initialQuery = '', isHero = false, onSearchS
                         key={product.id}
                         href={`/product/${product.id}`}
                         onClick={() => setIsOpen(false)}
-                        className="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 transition-colors group cursor-pointer"
+                        className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-50 transition-colors group cursor-pointer"
                       >
-                        <div className="w-10 h-10 relative rounded-lg bg-slate-100 overflow-hidden shrink-0 border border-slate-100">
+                        <div className="w-9 h-9 relative rounded-md bg-slate-100 overflow-hidden shrink-0 border border-slate-100">
                           <Image src={product.baseImages[0]} alt={product.title} fill className="object-cover" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h4 className="text-xs font-bold text-slate-900 group-hover:text-blue-600 transition-colors truncate">
+                          <h4 className="text-xs font-semibold text-slate-950 group-hover:text-blue-600 transition-colors truncate">
                             {product.title}
                           </h4>
-                          <div className="flex items-center gap-2 mt-0.5 text-[11px]">
+                          <div className="flex items-center gap-2 mt-0.5 text-[10px]">
                             {product.minStorePrice && (
-                              <span className="text-blue-700 font-semibold">
-                                Mağazada: {formatPrice(product.minStorePrice)}
+                              <span className="text-slate-600 font-medium">
+                                Mağazada: <strong className="text-slate-900">{formatPrice(product.minStorePrice)}</strong>
                               </span>
                             )}
                             {product.minIndividualPrice && (
-                              <span className="text-amber-700 font-semibold">
-                                İkinci əl: {formatPrice(product.minIndividualPrice)}
+                              <span className="text-amber-700 font-medium">
+                                İkinci əl: <strong>{formatPrice(product.minIndividualPrice)}</strong>
                               </span>
                             )}
                           </div>
@@ -196,8 +195,8 @@ export default function SearchBar({ initialQuery = '', isHero = false, onSearchS
 
               {matchedCategories.length > 0 && (
                 <div>
-                  <div className="px-3 py-1 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                    Kateqoriyalar
+                  <div className="px-2.5 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                    Bölmələr
                   </div>
                   <div className="mt-1 flex flex-wrap gap-1.5 px-2">
                     {matchedCategories.map(cat => (
@@ -205,7 +204,7 @@ export default function SearchBar({ initialQuery = '', isHero = false, onSearchS
                         key={cat.id}
                         href={`/category/${cat.slug}`}
                         onClick={() => setIsOpen(false)}
-                        className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs font-medium text-slate-700 transition-colors"
+                        className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 rounded-md text-xs font-medium text-slate-700 transition-colors"
                       >
                         {cat.name}
                       </Link>
@@ -217,7 +216,7 @@ export default function SearchBar({ initialQuery = '', isHero = false, onSearchS
               <div className="pt-2 border-t border-slate-100">
                 <button
                   onClick={() => handleSearch(query)}
-                  className="w-full flex items-center justify-between p-2 rounded-xl bg-slate-50 text-slate-900 hover:bg-slate-100 font-bold text-xs transition-colors cursor-pointer"
+                  className="w-full flex items-center justify-between p-2 rounded-lg bg-slate-50 text-slate-900 hover:bg-slate-100 font-semibold text-xs transition-colors cursor-pointer"
                 >
                   <span>&quot;{query}&quot; üçün bütün nəticələri göstər</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -225,9 +224,9 @@ export default function SearchBar({ initialQuery = '', isHero = false, onSearchS
               </div>
             </div>
           ) : (
-            <div className="p-4 space-y-4">
+            <div className="p-3.5 space-y-3">
               <div>
-                <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">
+                <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">
                   <TrendingUp className="w-3.5 h-3.5 text-slate-500" />
                   <span>Populyar Axtarışlar</span>
                 </div>
@@ -236,7 +235,7 @@ export default function SearchBar({ initialQuery = '', isHero = false, onSearchS
                     <button
                       key={term}
                       onClick={() => handleSearch(term)}
-                      className="px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-xs font-medium text-slate-700 transition-colors cursor-pointer"
+                      className="px-2.5 py-1 rounded-md bg-slate-100 hover:bg-slate-200 text-xs font-medium text-slate-700 transition-colors cursor-pointer"
                     >
                       {term}
                     </button>
