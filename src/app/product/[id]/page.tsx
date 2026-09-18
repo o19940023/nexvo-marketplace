@@ -173,47 +173,52 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
             </p>
           </div>
 
-          {/* Seller & Price Card */}
-          <div className="p-5 rounded-3xl bg-slate-900 text-white space-y-4 shadow-md">
+          {/* Seller & Price Console */}
+          <div className="p-6 rounded-2xl bg-slate-950 text-white space-y-4 shadow-xl border border-slate-800">
             <div className="flex items-center justify-between text-xs text-slate-400">
-              <span>{isStore ? 'Rəsmi Mağaza Qiyməti' : 'İkinci Əl Elan Qiyməti'}</span>
-              <span className="text-emerald-400 font-medium">✓ Zəmanətli Təklif</span>
+              <span className="font-semibold tracking-wide uppercase text-[11px] text-slate-300">
+                {isStore ? 'Rəsmi Mağaza Qiyməti' : 'İkinci Əl Elan Qiyməti'}
+              </span>
+              <span className="text-emerald-400 font-semibold text-xs flex items-center gap-1">
+                <ShieldCheck className="w-3.5 h-3.5" />
+                Təsdiqlənmiş Təklif
+              </span>
             </div>
 
-            <div className="flex items-baseline justify-between">
+            <div className="flex items-baseline justify-between pt-1">
               <div>
-                <span className="text-3xl font-black text-white">
+                <span className="text-3xl sm:text-4xl font-extrabold text-white price-tag">
                   {formatPrice(primaryOffer.price)}
                 </span>
                 {primaryOffer.originalPrice && (
-                  <span className="text-xs text-slate-400 line-through ml-2">
+                  <span className="text-sm text-slate-500 line-through ml-2.5 price-tag">
                     {formatPrice(primaryOffer.originalPrice)}
                   </span>
                 )}
               </div>
 
               <div className="text-right">
-                <span className="text-xs text-slate-300 block">{primaryOffer.sellerName}</span>
-                <span className="text-[10px] text-slate-400 flex items-center gap-1 justify-end">
+                <span className="text-xs font-semibold text-slate-200 block">{primaryOffer.sellerName}</span>
+                <span className="text-[11px] text-slate-400 flex items-center gap-1 justify-end mt-0.5">
                   <MapPin className="w-3 h-3" />
                   {primaryOffer.sellerCity}
                 </span>
               </div>
             </div>
 
-            <div className="pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-300">
-              <span>Zəmanət: <strong>{primaryOffer.warranty}</strong></span>
-              <span>Çatdırılma: <strong>{primaryOffer.deliveryType === 'cargo' ? 'Pulsuz Kargo' : 'Əldən Təhvil'}</strong></span>
+            <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-300">
+              <span>Zəmanət: <strong className="text-white font-semibold">{primaryOffer.warranty}</strong></span>
+              <span>Çatdırılma: <strong className="text-white font-semibold">{primaryOffer.deliveryType === 'cargo' ? 'Pulsuz Çatdırılma' : 'Əldən Təhvil'}</strong></span>
             </div>
           </div>
 
-          {/* Action buttons adapted to the primary offer seller type */}
+          {/* Tactile Action Buttons */}
           <div className="space-y-3">
             {isStore ? (
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => addToCart(primaryOffer, product)}
-                  className="flex-1 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl flex items-center justify-center gap-2 shadow-sm transition-all text-xs sm:text-sm cursor-pointer"
+                  className="flex-1 py-3 px-4 btn-primary text-xs sm:text-sm font-semibold rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-sm"
                 >
                   <ShoppingBag className="w-4 h-4" />
                   <span>Səbətə Əlavə Et</span>
@@ -222,7 +227,7 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
                 <Link
                   href="/checkout"
                   onClick={() => addToCart(primaryOffer, product)}
-                  className="py-3.5 px-6 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-2xl text-xs sm:text-sm transition-colors"
+                  className="py-3 px-6 btn-secondary text-xs sm:text-sm font-semibold rounded-xl transition-all"
                 >
                   İndi Al
                 </Link>
@@ -241,7 +246,7 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
                       productImage: primaryOffer.images[0] || product.baseImages[0],
                     })
                   }
-                  className="flex-1 py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-2xl flex items-center justify-center gap-2 shadow-sm transition-all text-xs sm:text-sm cursor-pointer"
+                  className="flex-1 py-3 px-4 btn-primary text-xs sm:text-sm font-semibold rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-sm"
                 >
                   <MessageSquare className="w-4 h-4" />
                   <span>Satıcıya Yaz</span>
@@ -249,9 +254,9 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
 
                 <button
                   onClick={() => openOfferModal(product, primaryOffer)}
-                  className="flex-1 py-3.5 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-2xl flex items-center justify-center gap-2 shadow-sm transition-all text-xs sm:text-sm cursor-pointer"
+                  className="flex-1 py-3 px-4 btn-secondary text-xs sm:text-sm font-semibold rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-sm"
                 >
-                  <Handshake className="w-4 h-4" />
+                  <Handshake className="w-4 h-4 text-amber-600" />
                   <span>Qiymət Təklif Et</span>
                 </button>
               </div>
@@ -264,7 +269,7 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
               </div>
               <div className="flex items-center gap-2">
                 <Truck className="w-4 h-4 text-blue-600 shrink-0" />
-                <span><strong>Sürətli Çatdırılma:</strong> Bakı daxilində eyni gündə ünvana təslim.</span>
+                <span><strong>Sürətli Çatdırılma:</strong> Bakı daxilində eyni gündə ünvana təhvil.</span>
               </div>
             </div>
           </div>
@@ -331,10 +336,10 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
       )}
 
       {/* Mobile Sticky Bottom Action Bar */}
-      <div className="fixed bottom-14 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-slate-200 p-3 md:hidden shadow-xl flex items-center justify-between gap-3">
+      <div className="fixed bottom-14 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-slate-200/80 p-3 md:hidden shadow-xl flex items-center justify-between gap-3">
         <div>
-          <span className="text-[10px] text-slate-400 block font-semibold">Qiymət</span>
-          <span className="text-base font-black text-slate-900">
+          <span className="text-[10px] text-slate-400 block font-semibold uppercase tracking-wider">Qiymət</span>
+          <span className="text-base font-extrabold text-slate-950 price-tag">
             {formatPrice(primaryOffer.price)}
           </span>
         </div>
@@ -342,7 +347,7 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
         {isStore ? (
           <button
             onClick={() => addToCart(primaryOffer, product)}
-            className="px-5 py-2.5 bg-blue-600 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm"
+            className="px-4 py-2 btn-primary text-xs font-semibold rounded-lg flex items-center gap-1.5 shadow-sm"
           >
             <ShoppingBag className="w-3.5 h-3.5" />
             <span>Səbətə At</span>
@@ -350,9 +355,9 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
         ) : (
           <button
             onClick={() => openOfferModal(product, primaryOffer)}
-            className="px-5 py-2.5 bg-amber-500 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm"
+            className="px-4 py-2 btn-secondary text-xs font-semibold rounded-lg flex items-center gap-1.5 shadow-sm"
           >
-            <Handshake className="w-3.5 h-3.5" />
+            <Handshake className="w-3.5 h-3.5 text-amber-600" />
             <span>Təklif Et</span>
           </button>
         )}

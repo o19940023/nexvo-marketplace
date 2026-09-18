@@ -41,20 +41,20 @@ export default function AlternativeOffersSection({ product, currentMode }: Alter
   const savings = minStore && minInd && minStore > minInd ? minStore - minInd : 0;
 
   return (
-    <section className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm space-y-6">
+    <section className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700">
+            <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-slate-900 text-white">
               {currentMode === 'store' ? 'Daha Sərfəli Seçim' : 'Rəsmi Mağaza Alternativi'}
             </span>
             {currentMode === 'store' && savings > 0 && (
-              <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+              <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200">
                 {formatPrice(savings)} Qənaət İmkanı
               </span>
             )}
           </div>
-          <h3 className="text-lg sm:text-xl font-black text-slate-900 mt-1.5">
+          <h3 className="text-lg sm:text-xl font-bold text-slate-950 mt-1.5 font-display">
             {currentMode === 'store'
               ? `Bu Məhsulun Fərdi Şəxslərdən İkinci Əl Elanları (${alternativeOffers.length} elan)`
               : `Bu Məhsulun Rəsmi Mağazalarda Sıfır Qiymətləri (${alternativeOffers.length} mağaza)`}
@@ -75,23 +75,19 @@ export default function AlternativeOffersSection({ product, currentMode }: Alter
           return (
             <div
               key={offer.id}
-              className={`p-4 rounded-2xl border transition-all flex flex-col justify-between ${
-                isStore
-                  ? 'border-blue-100 bg-blue-50/20 hover:border-blue-300'
-                  : 'border-amber-100 bg-amber-50/20 hover:border-amber-300'
-              }`}
+              className="luxury-card rounded-xl p-4 flex flex-col justify-between"
             >
               <div>
                 {/* Seller identity row */}
                 <div className="flex items-center justify-between gap-2 pb-3 border-b border-slate-100">
                   <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="w-9 h-9 rounded-full relative overflow-hidden bg-slate-100 shrink-0 border border-slate-200">
+                    <div className="w-8 h-8 rounded-full relative overflow-hidden bg-slate-100 shrink-0 border border-slate-200">
                       <Image src={offer.sellerAvatar} alt={offer.sellerName} fill className="object-cover" />
                     </div>
                     <div className="min-w-0">
-                      <h4 className="text-xs font-bold text-slate-900 truncate">{offer.sellerName}</h4>
+                      <h4 className="text-xs font-semibold text-slate-950 truncate">{offer.sellerName}</h4>
                       <div className="flex items-center gap-1.5 text-[11px] text-slate-500">
-                        <span className="flex items-center gap-0.5 text-slate-700 font-bold">
+                        <span className="flex items-center gap-0.5 text-slate-800 font-medium">
                           <Star className="w-3 h-3 fill-amber-400 stroke-amber-400" />
                           <span>{offer.sellerRating}</span>
                         </span>
@@ -109,7 +105,7 @@ export default function AlternativeOffersSection({ product, currentMode }: Alter
                   <div className="flex items-center gap-1.5 flex-wrap">
                     <ConditionBadge condition={offer.condition} size="sm" />
                     {offer.batteryHealth && (
-                      <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                      <span className="text-[10px] font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
                         Pil: %{offer.batteryHealth}
                       </span>
                     )}
@@ -132,14 +128,14 @@ export default function AlternativeOffersSection({ product, currentMode }: Alter
               {/* Bottom Price & Actions */}
               <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
                 <div>
-                  <span className="text-[10px] text-slate-400 block font-medium">Təklif Qiyməti:</span>
-                  <span className="text-base font-black text-slate-900">{formatPrice(offer.price)}</span>
+                  <span className="text-[10px] text-slate-400 block font-medium uppercase tracking-wider">Təklif Qiyməti</span>
+                  <span className="text-base font-bold text-slate-950 price-tag">{formatPrice(offer.price)}</span>
                 </div>
 
                 {isStore ? (
                   <button
                     onClick={() => addToCart(offer, product)}
-                    className="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center gap-1 transition-all"
+                    className="px-3 py-1.5 btn-primary rounded-lg text-xs font-semibold flex items-center gap-1 cursor-pointer"
                   >
                     <ShoppingBag className="w-3.5 h-3.5" />
                     <span>Səbətə At</span>
@@ -158,7 +154,7 @@ export default function AlternativeOffersSection({ product, currentMode }: Alter
                           productImage: offer.images[0] || product.baseImages[0],
                         })
                       }
-                      className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-bold transition-colors"
+                      className="p-1.5 btn-secondary rounded-lg text-xs font-semibold cursor-pointer"
                       title="Satıcıya Yaz"
                     >
                       <MessageSquare className="w-3.5 h-3.5" />
@@ -166,9 +162,9 @@ export default function AlternativeOffersSection({ product, currentMode }: Alter
 
                     <button
                       onClick={() => openOfferModal(product, offer)}
-                      className="px-3 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-bold flex items-center gap-1 transition-all shadow-xs"
+                      className="px-3 py-1.5 btn-primary rounded-lg text-xs font-semibold flex items-center gap-1 cursor-pointer"
                     >
-                      <Handshake className="w-3.5 h-3.5" />
+                      <Handshake className="w-3.5 h-3.5 text-amber-400" />
                       <span>Təklif Et</span>
                     </button>
                   </div>

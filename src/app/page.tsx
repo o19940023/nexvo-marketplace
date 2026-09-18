@@ -6,6 +6,7 @@ import Image from 'next/image';
 import gsap from 'gsap';
 import SearchBar from '@/components/search/SearchBar';
 import ProductCard from '@/components/product/ProductCard';
+import ModeSwitcher from '@/components/ui/ModeSwitcher';
 import { PRODUCTS, CATEGORIES, STORES, INDIVIDUAL_SELLERS } from '@/data/mockData';
 import { useMarketplace } from '@/context/MarketplaceContext';
 import {
@@ -21,19 +22,20 @@ import {
   Sparkles,
   ArrowRight,
   Layers,
+  Zap,
+  Tag,
 } from 'lucide-react';
 
 export default function HomePage() {
   const { marketMode, setMarketMode, userCity, formatPrice } = useMarketplace();
   const heroContentRef = useRef<HTMLDivElement>(null);
-  const spotlightRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (heroContentRef.current) {
       gsap.fromTo(
         heroContentRef.current,
-        { opacity: 0, y: 12 },
-        { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }
+        { opacity: 0, y: 15 },
+        { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out' }
       );
     }
   }, [marketMode]);
@@ -43,172 +45,146 @@ export default function HomePage() {
   const c2cProducts = PRODUCTS.filter(p => p.individualOfferCount > 0);
   const activeProducts = marketMode === 'store' ? storeProducts : c2cProducts;
 
-  // Hero Featured Spotlight Product (iPhone 17 Pro or PS5)
-  const spotlightProduct = marketMode === 'store'
-    ? PRODUCTS.find(p => p.id === 'iphone-17-pro') || PRODUCTS[0]
-    : PRODUCTS.find(p => p.id === 'ps5-slim') || PRODUCTS[1];
+  // Comparison flagship product
+  const duelProduct = PRODUCTS.find(p => p.id === 'iphone-17-pro') || PRODUCTS[0];
+  const duelStoreOffer = duelProduct.offers.find(o => o.sellerType === 'store') || duelProduct.offers[0];
+  const duelIndOffer = duelProduct.offers.find(o => o.sellerType === 'individual') || duelProduct.offers[1];
 
   return (
-    <div className="space-y-16 pb-20">
-      {/* 1. EDITORIAL ASYMMETRIC HERO SECTION */}
-      <section className="bg-[#090b11] text-white pt-12 pb-20 px-4 sm:px-6 relative overflow-hidden border-b border-white/[0.08]">
-        {/* Subtle Ambient Studio Lighting */}
-        <div className="absolute top-0 right-1/4 w-[600px] h-[400px] bg-blue-600/[0.07] rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-0 left-10 w-[400px] h-[300px] bg-slate-400/[0.04] rounded-full blur-[100px] pointer-events-none" />
+    <div className="space-y-16 pb-24">
+      {/* 1. MASTER HYBRID HERO & INTERACTIVE CONSOLE */}
+      <section className="bg-[#090b11] text-white pt-10 pb-20 px-4 sm:px-6 relative overflow-hidden border-b border-white/[0.08]">
+        {/* Ambient Subtle Visual Glows */}
+        <div className="absolute -top-32 right-1/4 w-[700px] h-[500px] bg-blue-600/[0.08] rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute bottom-0 left-5 w-[500px] h-[400px] bg-amber-600/[0.05] rounded-full blur-[120px] pointer-events-none" />
 
-        <div className="max-w-7xl mx-auto">
-          {/* Top Mode Selector Bar */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pb-10 border-b border-white/[0.08]">
-            <div className="flex items-center gap-3">
-              <span className="section-label text-slate-400">Rejim Seçimi:</span>
-              <div className="inline-flex items-center p-1 rounded-xl bg-white/[0.06] border border-white/[0.1] backdrop-blur-md">
-                <button
-                  onClick={() => setMarketMode('store')}
-                  className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                    marketMode === 'store'
-                      ? 'bg-white text-slate-950 shadow-sm'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                >
-                  <Store className="w-3.5 h-3.5 text-blue-600" />
-                  <span>Rəsmi Mağazalar</span>
-                </button>
-                <button
-                  onClick={() => setMarketMode('c2c')}
-                  className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                    marketMode === 'c2c'
-                      ? 'bg-white text-slate-950 shadow-sm'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                >
-                  <User className="w-3.5 h-3.5 text-amber-600" />
-                  <span>İkinci Əl Bazar</span>
-                </button>
-              </div>
+        <div className="max-w-7xl mx-auto space-y-12 relative z-10">
+          {/* Top Live Baku Activity Ticker */}
+          <div className="flex items-center justify-between py-2 px-4 rounded-xl bg-white/[0.03] border border-white/[0.06] text-[11px] text-slate-400">
+            <div className="flex items-center gap-2 overflow-hidden">
+              <span className="flex h-2 w-2 relative">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              <span className="font-semibold text-white tracking-wide uppercase text-[10px]">Bakı Birjası:</span>
+              <span className="truncate text-slate-300">
+                Murad Q. PS5 Slim qiymətini 790 ₼-ə endirdi • TechZone 2 yeni məhsul yerləşdirdi • Zəmanətli çatdırılma aktivdir
+              </span>
+            </div>
+            <span className="hidden md:block text-slate-500 font-mono text-[10px] shrink-0 ml-4">
+              Canlı Rejim
+            </span>
+          </div>
+
+          {/* Central Hero Heading & Mode Selector Console */}
+          <div ref={heroContentRef} className="text-center space-y-6 max-w-3xl mx-auto">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.06] border border-white/[0.1] text-xs font-semibold text-slate-300">
+              <Sparkles className="w-3.5 h-3.5 text-blue-400" />
+              <span>Azərbaycanın İlk Hibrid Ticarət Ekosistemi</span>
             </div>
 
-            <div className="hidden lg:flex items-center gap-6 text-xs text-slate-400">
-              <span className="flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-blue-400" />
-                24 Ay Rəsmi Zəmanət
-              </span>
-              <span className="text-slate-700">•</span>
-              <span className="flex items-center gap-1.5">
-                <Truck className="w-4 h-4 text-emerald-400" />
-                Eyni Gündə Çatdırılma
-              </span>
-              <span className="text-slate-700">•</span>
-              <span className="flex items-center gap-1.5">
-                <Handshake className="w-4 h-4 text-amber-400" />
-                Yerində Yoxlama
-              </span>
+            <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-white leading-[1.08] font-display">
+              {marketMode === 'store' ? (
+                <>
+                  Rəsmi Distribütorlar. <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 via-blue-100 to-white">
+                    Sıfır və 24 Ay Zəmanətli.
+                  </span>
+                </>
+              ) : (
+                <>
+                  İkinci Əl Bazar. <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-100 to-white">
+                    Fərdlərdən Yoxlanılmış Elanlar.
+                  </span>
+                </>
+              )}
+            </h1>
+
+            <p className="text-sm sm:text-base text-slate-300 max-w-xl mx-auto leading-relaxed">
+              {marketMode === 'store'
+                ? 'Yetkili mağazalardan adınıza elektron qaimə fakturalı, rəsmi servis zəmanətli məhsullar və eyni gündə ünvana çatdırılma.'
+                : 'Təsdiqlənmiş istifadəçilərdən təmiz, qutulu cihazlar. Əldən təhvil alaraq yoxlama və qiymət təklif edib razılaşma imkanı.'}
+            </p>
+
+            {/* THE PROMINENT TACTILE REJİM CONSOLE */}
+            <div className="pt-2">
+              <ModeSwitcher variant="hero" />
+            </div>
+
+            {/* Integrated Sleek Search Bar */}
+            <div className="pt-2 max-w-xl mx-auto">
+              <SearchBar isHero={true} />
             </div>
           </div>
 
-          {/* Dynamic Editorial Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center pt-10">
-            {/* Left Column: Typography & Search */}
-            <div ref={heroContentRef} className="lg:col-span-7 space-y-6">
-              <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-white/[0.08] border border-white/[0.1] text-[11px] font-medium text-slate-300">
-                <Sparkles className="w-3 h-3 text-blue-400" />
-                <span>{marketMode === 'store' ? 'Yetkili Distribütor Şəbəkəsi' : 'Təsdiqlənmiş Fərdi İcma'}</span>
+          {/* 2. LIVE DUAL-MARKET COMPARISON SHOWCASE (Visual Proof of Core Concept) */}
+          <div className="bg-white/[0.03] border border-white/[0.08] rounded-3xl p-6 sm:p-8 backdrop-blur-md relative overflow-hidden">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-white/[0.08]">
+              <div>
+                <span className="section-label text-blue-400">Canlı Müqayisə Texnologiyası</span>
+                <h3 className="text-xl font-extrabold text-white mt-0.5">
+                  Eyni Məhsul — İki Fərqli Alış Seçimi
+                </h3>
               </div>
-
-              {marketMode === 'store' ? (
-                <div className="space-y-3">
-                  <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-[1.08] font-display">
-                    Rəsmi Mağazalar. <br />
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 via-blue-100 to-white">
-                      Sıfır və Zəmanətli.
-                    </span>
-                  </h1>
-                  <p className="text-sm sm:text-base text-slate-300 max-w-xl leading-relaxed">
-                    Bağlı qutuda, adınıza elektron qaimə fakturalı, 24 ay rəsmi servis zəmanətli cihazlar və sürətli kuryer çatdırılması.
-                  </p>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-[1.08] font-display">
-                    İkinci Əl Bazar. <br />
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-100 to-white">
-                      Yoxlanılmış Elanlar.
-                    </span>
-                  </h1>
-                  <p className="text-sm sm:text-base text-slate-300 max-w-xl leading-relaxed">
-                    Fərdlərdən təmiz, qutulu cihazlar. Satıcı ilə birbaşa əlaqə, qiymətdə təklif verib razılaşma və yerində təhvil alma rahatlığı.
-                  </p>
-                </div>
-              )}
-
-              {/* Integrated Search */}
-              <div className="pt-2 max-w-xl">
-                <SearchBar isHero={true} />
-              </div>
-
-              {/* Quick Keyword Anchors */}
-              <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400 pt-1">
-                <span className="text-slate-500 font-medium">Trendlər:</span>
-                {['iPhone 17 Pro', 'MacBook Air M4', 'PlayStation 5 Slim', 'Sony WH-1000XM6', 'Dyson V15'].map(item => (
-                  <Link
-                    key={item}
-                    href={`/search?q=${encodeURIComponent(item)}`}
-                    className="px-2.5 py-1 rounded-md bg-white/[0.05] hover:bg-white/[0.12] border border-white/[0.08] text-slate-300 text-xs transition-colors"
-                  >
-                    {item}
-                  </Link>
-                ))}
+              <div className="text-xs text-slate-400">
+                NEXVO hər məhsul üçün həm sıfır mağaza, həm də ikinci əl fərdi qiymətlərini qarşılaşdırır.
               </div>
             </div>
 
-            {/* Right Column: Hero Spotlight Card */}
-            <div className="lg:col-span-5 relative">
-              <div className="glass-dark rounded-2xl p-5 sm:p-6 space-y-4 shadow-2xl relative overflow-hidden">
-                <div className="flex items-center justify-between pb-3 border-b border-white/[0.08] text-xs">
-                  <span className="text-slate-400 font-medium tracking-wide">GÜNÜN TƏKLİFİ</span>
-                  <span className="px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 text-[10px] font-bold border border-blue-500/30">
-                    Özəl Qiymət
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-6">
+              {/* Product Visual */}
+              <div className="lg:col-span-4 flex items-center gap-4">
+                <div className="w-28 h-28 sm:w-36 sm:h-36 relative rounded-2xl overflow-hidden bg-slate-900 border border-white/[0.1] shrink-0">
+                  <Image src={duelProduct.baseImages[0]} alt={duelProduct.title} fill className="object-cover" />
+                </div>
+                <div>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{duelProduct.brand}</span>
+                  <h4 className="text-base font-bold text-white leading-snug">{duelProduct.title}</h4>
+                  <span className="text-xs text-slate-400 block mt-1">{duelProduct.specifications[0]?.value}</span>
+                </div>
+              </div>
+
+              {/* Side A: Store Option */}
+              <div className="lg:col-span-4 p-4 rounded-2xl bg-white/[0.04] border border-blue-500/30 space-y-3">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-bold text-blue-400 flex items-center gap-1.5">
+                    <Store className="w-4 h-4" />
+                    Rəsmi Mağazada Sıfır
+                  </span>
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 font-semibold">
+                    Zəmanətli
                   </span>
                 </div>
-
-                <div className="aspect-[4/3] relative rounded-xl overflow-hidden bg-slate-900 border border-white/[0.06]">
-                  <Image
-                    src={spotlightProduct.baseImages[0]}
-                    alt={spotlightProduct.title}
-                    fill
-                    className="object-cover hover:scale-105 transition-transform duration-700 ease-out"
-                  />
-                  <div className="absolute top-2.5 left-2.5">
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-950/90 text-white backdrop-blur-xs">
-                      {spotlightProduct.brand}
-                    </span>
-                  </div>
+                <div className="text-2xl font-black text-white price-tag">
+                  {formatPrice(duelStoreOffer.price)}
                 </div>
+                <ul className="text-[11px] text-slate-300 space-y-1">
+                  <li>✓ 24 Ay Rəsmi Apple Zəmanəti</li>
+                  <li>✓ Sıfır Plomblu Qutu & Elektron Qaimə</li>
+                  <li>✓ 2 saatda kuryerlə qapıda təhvil</li>
+                </ul>
+              </div>
 
-                <div>
-                  <h3 className="text-base font-bold text-white leading-snug">
-                    {spotlightProduct.title}
-                  </h3>
-                  <p className="text-xs text-slate-400 mt-1 line-clamp-1">
-                    {spotlightProduct.shortDescription}
-                  </p>
+              {/* Side B: Second Hand Option */}
+              <div className="lg:col-span-4 p-4 rounded-2xl bg-white/[0.04] border border-amber-500/30 space-y-3">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-bold text-amber-400 flex items-center gap-1.5">
+                    <User className="w-4 h-4" />
+                    İkinci Əl Fərdi Elan
+                  </span>
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold">
+                    {formatPrice(duelStoreOffer.price - duelIndOffer.price)} Qənaət!
+                  </span>
                 </div>
-
-                <div className="pt-3 border-t border-white/[0.08] flex items-center justify-between">
-                  <div>
-                    <span className="text-[10px] text-slate-400 block font-medium">Başlanğıc Qiymət</span>
-                    <span className="text-lg font-extrabold text-white price-tag">
-                      {formatPrice(spotlightProduct.minStorePrice || spotlightProduct.minIndividualPrice || 0)}
-                    </span>
-                  </div>
-
-                  <Link
-                    href={`/product/${spotlightProduct.id}`}
-                    className="px-4 py-2 rounded-lg bg-white text-slate-950 text-xs font-bold hover:bg-slate-100 transition-all flex items-center gap-1.5 shadow-sm"
-                  >
-                    <span>Məhsula Bax</span>
-                    <ArrowUpRight className="w-3.5 h-3.5" />
-                  </Link>
+                <div className="text-2xl font-black text-white price-tag">
+                  {formatPrice(duelIndOffer.price)}
                 </div>
+                <ul className="text-[11px] text-slate-300 space-y-1">
+                  <li>✓ Satıcı: {duelIndOffer.sellerName} (Reytinq 4.9)</li>
+                  <li>✓ Pil Sağlığı: %100, 1 aylıq səliqəli cihaz</li>
+                  <li>✓ Bakı, Sahil metrosunda yerində yoxlama</li>
+                </ul>
               </div>
             </div>
           </div>

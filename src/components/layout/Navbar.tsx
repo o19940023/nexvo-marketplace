@@ -24,6 +24,7 @@ import {
   Check,
 } from 'lucide-react';
 import { CATEGORIES } from '@/data/mockData';
+import ModeSwitcher from '@/components/ui/ModeSwitcher';
 
 const ICONS_MAP: Record<string, React.ReactNode> = {
   Smartphone: <Smartphone className="w-3.5 h-3.5" />,
@@ -166,32 +167,8 @@ export default function Navbar() {
 
         {/* PRIMARY MODE SWITCHER (Bespoke Tactile Control) */}
         {!isCheckout && (
-          <div className="hidden lg:flex items-center p-1 rounded-xl bg-slate-100/90 border border-slate-200/80 shadow-inner">
-            <button
-              onClick={() => setMarketMode('store')}
-              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                marketMode === 'store'
-                  ? 'bg-white text-slate-950 shadow-sm border border-slate-200/60'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <Store className={`w-3.5 h-3.5 ${marketMode === 'store' ? 'text-blue-600' : 'text-slate-400'}`} />
-              <span>Rəsmi Mağazalar</span>
-              <span className="text-[10px] text-slate-400 font-normal">Sıfır & Zəmanətli</span>
-            </button>
-
-            <button
-              onClick={() => setMarketMode('c2c')}
-              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                marketMode === 'c2c'
-                  ? 'bg-white text-slate-950 shadow-sm border border-slate-200/60'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <User className={`w-3.5 h-3.5 ${marketMode === 'c2c' ? 'text-amber-600' : 'text-slate-400'}`} />
-              <span>İkinci Əl Bazar</span>
-              <span className="text-[10px] text-slate-400 font-normal">Fərdi Təkliflər</span>
-            </button>
+          <div className="hidden lg:block">
+            <ModeSwitcher variant="navbar" />
           </div>
         )}
 
@@ -259,24 +236,7 @@ export default function Navbar() {
       {/* Mobile Mode Switcher Row */}
       {!isCheckout && (
         <div className="lg:hidden px-4 pb-2">
-          <div className="grid grid-cols-2 p-1 rounded-xl bg-slate-100/90 border border-slate-200/80 text-xs font-semibold">
-            <button
-              onClick={() => setMarketMode('store')}
-              className={`py-1.5 rounded-lg text-center transition-all ${
-                marketMode === 'store' ? 'bg-white text-slate-950 shadow-sm font-bold' : 'text-slate-600'
-              }`}
-            >
-              🏬 Rəsmi Mağazalar
-            </button>
-            <button
-              onClick={() => setMarketMode('c2c')}
-              className={`py-1.5 rounded-lg text-center transition-all ${
-                marketMode === 'c2c' ? 'bg-white text-slate-950 shadow-sm font-bold' : 'text-slate-600'
-              }`}
-            >
-              👤 İkinci Əl Bazar
-            </button>
-          </div>
+          <ModeSwitcher variant="navbar" className="w-full justify-center" />
         </div>
       )}
 
